@@ -1,11 +1,12 @@
 package hessim.config;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class MessageQueue {
 	public String inboundQueue;
 	public String outboundQueue;
-	public HashMap<String, MessageType> messageTypes;
+	public Map<String, MessageType> messageTypes;
 	
 	public MessageQueue()
 	{

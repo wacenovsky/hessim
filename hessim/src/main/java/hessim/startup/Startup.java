@@ -11,6 +11,7 @@ import com.google.inject.Injector;
 
 import hessim.msgprocessor.IMessageProcessor;
 import hessim.msgprocessor.MessageProcessor;
+import hessim.msgprocessor.MessageProcessorAsync;
 
 import com.google.gson.Gson; 
 import com.google.gson.GsonBuilder;  
@@ -21,7 +22,7 @@ public class Startup {
 		try {
 			MyLogger.setup();
 			Injector injector = Guice.createInjector(new BindingsModule());
-			IMessageProcessor msgproc = injector.getInstance(MessageProcessor.class);
+			MessageProcessorAsync msgproc = injector.getInstance(MessageProcessorAsync.class);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

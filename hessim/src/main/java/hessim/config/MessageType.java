@@ -1,9 +1,10 @@
 package hessim.config;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class MessageType {
-	public HashMap<String, String> templates;
+	public Map<String, String> templates;
 	
 	public MessageType()
 	{
