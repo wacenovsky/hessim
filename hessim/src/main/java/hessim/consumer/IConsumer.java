@@ -1,4 +1,4 @@
-package consumer;
+package hessim.consumer;
 
 public interface IConsumer {
 

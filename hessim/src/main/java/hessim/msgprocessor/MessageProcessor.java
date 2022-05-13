@@ -14,9 +14,9 @@ import org.apache.activemq.Message;
 
 import com.google.inject.Inject;
 
-import consumer.Consumer;
 import hessim.config.Config;
 import hessim.config.MessageQueue;
+import hessim.consumer.Consumer;
 
 public class MessageProcessor implements IMessageProcessor, Runnable
 {

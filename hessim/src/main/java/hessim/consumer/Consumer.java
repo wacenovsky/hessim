@@ -1,4 +1,4 @@
-package consumer;
+package hessim.consumer;
 
 import hessim.config.MessageQueue;
 import hessim.msgprocessor.MessageContainer;
