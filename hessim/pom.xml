@@ -1,0 +1,79 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.siemens</groupId>
+  <artifactId>hessim</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>Hes Simulator</name>
+  
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>18</maven.compiler.source>
+    <maven.compiler.target>18</maven.compiler.target>
+  </properties>
+  
+  <dependencies>
+		<!-- https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple -->
+		<dependency>
+		    <groupId>com.googlecode.json-simple</groupId>
+		    <artifactId>json-simple</artifactId>
+		    <version>1.1.1</version>
+		</dependency>
+		
+		<dependency>
+    		<groupId>com.google.inject</groupId>
+    		<artifactId>guice</artifactId>
+    		<version>4.1.0</version>
+		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/org.apache.activemq/activemq-client -->
+		<dependency>
+		    <groupId>org.apache.activemq</groupId>
+		    <artifactId>activemq-client</artifactId>
+		    <version>5.17.1</version>
+		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/org.apache.activemq/activemq-broker -->
+		<dependency>
+		    <groupId>org.apache.activemq</groupId>
+		    <artifactId>activemq-broker</artifactId>
+		    <version>5.17.1</version>
+		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
+		<dependency>
+		    <groupId>com.google.code.gson</groupId>
+		    <artifactId>gson</artifactId>
+		    <version>2.9.0</version>
+		</dependency>
+
+
+  </dependencies> 
+  
+	<build>
+	    <plugins>
+		    <plugin>
+		        <artifactId>maven-assembly-plugin</artifactId>
+		        <configuration>
+		            <archive>
+		                <manifest>
+		                    <mainClass>maven.test.MyClass</mainClass>
+		                </manifest>
+		            </archive>
+		            <descriptorRefs>
+		                <descriptorRef>jar-with-dependencies</descriptorRef>
+		            </descriptorRefs>
+		        </configuration>
+		        <executions>
+		            <execution>
+		                <id>make-assembly</id>
+		                <phase>package</phase>
+		                <goals>
+		                    <goal>single</goal>
+		                </goals>
+		            </execution>
+		        </executions>
+		    </plugin>
+		    
+		</plugins>
+	</build>
+</project>
