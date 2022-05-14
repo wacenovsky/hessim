@@ -12,6 +12,7 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageConsumer;
 import javax.jms.MessageListener;
+import javax.jms.MessageProducer;
 import javax.jms.Queue;
 import javax.jms.Session;
 import javax.jms.TextMessage;
@@ -29,20 +30,25 @@ public class MessageProcessorAsync implements Runnable, MessageListener
 {
 	BlockingQueue<Message> queue;
 	
-	public Map<String, MessageQueue> rootEelementName2messageQueue;
+	public Map<String, MessageProducer> rootElementName2MessageProducer;
+	public Map<String, Map<String, String>> rootElementName2Templates;
 	Config config;
 	private final static Logger LOGGER = Logger.getLogger(MessageProcessorAsync.class.getName());
 	private Thread workerThread;
 	private Connection inboundConnection;
 	private Session inboundSession;
+	private Connection outboundConnection;
+	private Session outboundSession;
 	
 	@Inject
 	public MessageProcessorAsync(Config cnf)
 	{
 		config = cnf;
 		queue = new LinkedBlockingQueue<Message>();
-		rootEelementName2messageQueue = new HashMap<String, MessageQueue>();
+		rootElementName2MessageProducer = new HashMap<String, MessageProducer>();
+		rootElementName2Templates = new HashMap<String, Map<String, String>>() ;
 		createConsumers();
+		createResponseProducers();
 		workerThread = new Thread(this);
 		workerThread.start();
 	}
@@ -62,13 +68,37 @@ public class MessageProcessorAsync implements Runnable, MessageListener
 				Queue queue = this.inboundSession.createQueue(q.inboundQueue);
 				MessageConsumer consumer = this.inboundSession.createConsumer(queue);
 				consumer.setMessageListener(this);
+			
+			}
+	    } catch (JMSException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void createResponseProducers()
+	{
+		String outboundUrl = String.format("tcp://%s:%s", config.outboundIP, config.outboundPort);
+		try {
+			ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(outboundUrl);
+			
+			outboundConnection = connectionFactory.createConnection();
+			outboundConnection.start();
+			outboundSession = outboundConnection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+	           
+			for (MessageQueue q : config.messageQueues)
+			{
+				Queue queue = this.outboundSession.createQueue(q.outboundQueue);
+				MessageProducer producer = this.inboundSession.createProducer(queue);
 				
-				// create map root element name -> messageQueue
 				for (Map.Entry<String,MessageType> entry : q.messageTypes.entrySet())
 				{
 					String messageName = entry.getKey();
-					rootEelementName2messageQueue.put(messageName, q);
+					MessageType messageType = entry.getValue();
+					rootElementName2MessageProducer.put(messageName, producer);
+					rootElementName2Templates.put(messageName, messageType.templates);
 				}
+
 			}
 	    } catch (JMSException e) {
 			// TODO Auto-generated catch block
@@ -129,6 +159,13 @@ public class MessageProcessorAsync implements Runnable, MessageListener
 		{
 			String rootElementName = xml.getRootElementName();
 			LOGGER.info("   Root Element:" + rootElementName);
+			
+
+			String t1 = rootElementName2Templates.get(rootElementName).get("key1");
+			LOGGER.info("   Template1:" + t1);
+			
+			String t2 = rootElementName2Templates.get(rootElementName).get("key2");
+			LOGGER.info("   Template2:" + t2);
 		}
 		
 	}
