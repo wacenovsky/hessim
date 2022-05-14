@@ -1,3 +1,6 @@
+// Add this to VM Arguments
+// --add-opens java.base/java.lang=ALL-UNNAMED
+//
 package hessim.startup;
 
 import java.io.IOException;
