@@ -23,6 +23,7 @@ import com.google.inject.Inject;
 import hessim.config.Config;
 import hessim.config.MessageQueue;
 import hessim.config.MessageType;
+import hessim.xml.XmlContent;
 
 public class MessageProcessorAsync implements Runnable, MessageListener
 {
@@ -107,7 +108,8 @@ public class MessageProcessorAsync implements Runnable, MessageListener
 				if (msg != null &&  msg instanceof TextMessage) 
 				{
 	                TextMessage textMessage = (TextMessage) msg;
-	                LOGGER.info("   Received Message Text:" + textMessage.getText());
+	                //LOGGER.info("   Received Message Text:" + textMessage.getText());
+	                handleMessageString(textMessage.getText());
 	            }
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
@@ -119,8 +121,15 @@ public class MessageProcessorAsync implements Runnable, MessageListener
 		}
 	}
 	
-	public void handlemessage(Message msg)
+	public void handleMessageString(String msg)
 	{
+	
+		XmlContent xml = new XmlContent();
+		if (xml.readFromString(msg) == 0)
+		{
+			String rootElementName = xml.getRootElementName();
+			LOGGER.info("   Root Element:" + rootElementName);
+		}
 		
 	}
 }

@@ -3,6 +3,9 @@ package hessim.xml;
 import java.io.FileNotFoundException;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -19,9 +22,11 @@ import javax.xml.transform.stream.*;
 import javax.xml.transform.TransformerFactory;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 
@@ -36,13 +41,15 @@ public class XmlContent {
 		domContent = null;
 	}
 	
-	public void readFromFile(String filename)
+	public int readFromFile(String filename)
 	{
+		int retval = -1;
 		try (FileInputStream fileIS = new FileInputStream(filename))
 	    {
 			DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = builderFactory.newDocumentBuilder();
 			domContent = builder.parse(fileIS);
+			retval = 0;
 
 	    } catch (FileNotFoundException e) {
 	        e.printStackTrace();
@@ -53,6 +60,29 @@ public class XmlContent {
 	    } catch (SAXException e) {
 	    	e.printStackTrace();	
 	    }
+		return retval;
+	}	
+	
+	public int readFromString(String content)
+	{
+		int retval = -1;
+		try {
+			InputSource source = new InputSource(new StringReader(content));
+			DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder builder;
+			builder = builderFactory.newDocumentBuilder();
+			domContent = builder.parse(source);
+			retval = 0;
+	    } catch (FileNotFoundException e) {
+	        e.printStackTrace();
+	    } catch (IOException e) {
+	        e.printStackTrace();	
+	    } catch (ParserConfigurationException e) {
+	    	e.printStackTrace();	
+	    } catch (SAXException e) {
+	    	e.printStackTrace();	
+	    }
+		return retval;
 	}	
 	
 	
@@ -81,6 +111,32 @@ public class XmlContent {
 		}
 		
 		return result;
+	}
+	
+	public Node getXpathNode(String expression)
+	{
+		Node node  = null;
+		if (domContent == null) return null;
+		
+		XPath xPath = XPathFactory.newInstance().newXPath();
+		try {
+			node = (Node) xPath.compile(expression).evaluate(domContent, XPathConstants.NODE);
+			if (node == null) return null;
+		    @SuppressWarnings("unused")
+			short nodeType = node.getNodeType();
+		} catch (XPathExpressionException e) {
+			e.printStackTrace();
+		}
+		
+		return node;
+	}
+	
+	public String getRootElementName()
+	{
+		if (domContent == null) return null;
+		Element elem = domContent.getDocumentElement();
+		if (elem == null) return null;
+		return elem.getNodeName();
 	}
 	
 	// https://www.baeldung.com/java-pretty-print-xml
