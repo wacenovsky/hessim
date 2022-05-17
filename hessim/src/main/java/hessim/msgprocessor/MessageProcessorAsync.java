@@ -25,6 +25,8 @@ import hessim.config.Config;
 import hessim.config.MessageQueue;
 import hessim.config.MessageType;
 import hessim.xml.XmlContent;
+import messagehandler.IMessageHandler;
+import messagehandler.MessageHandlerCollection;
 
 public class MessageProcessorAsync implements Runnable, MessageListener
 {
@@ -39,6 +41,7 @@ public class MessageProcessorAsync implements Runnable, MessageListener
 	private Session inboundSession;
 	private Connection outboundConnection;
 	private Session outboundSession;
+	private MessageHandlerCollection messageHandlerCollection;
 	
 	@Inject
 	public MessageProcessorAsync(Config cnf)
@@ -47,6 +50,7 @@ public class MessageProcessorAsync implements Runnable, MessageListener
 		queue = new LinkedBlockingQueue<Message>();
 		rootElementName2MessageProducer = new HashMap<String, MessageProducer>();
 		rootElementName2Templates = new HashMap<String, Map<String, String>>() ;
+		messageHandlerCollection = new MessageHandlerCollection();
 		createConsumers();
 		createResponseProducers();
 		workerThread = new Thread(this);
@@ -58,6 +62,8 @@ public class MessageProcessorAsync implements Runnable, MessageListener
 		String inboundUrl = String.format("tcp://%s:%s", config.inboundIP, config.inboundPort);
 		try {
 			ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(inboundUrl);
+			connectionFactory.setUserName("michi"); // TODO 
+			connectionFactory.setPassword("michi");
 			
 			inboundConnection = connectionFactory.createConnection();
 			inboundConnection.start();
@@ -153,19 +159,20 @@ public class MessageProcessorAsync implements Runnable, MessageListener
 	
 	public void handleMessageString(String msg)
 	{
-	
+		LOGGER.info(String.format("Got Request:\n%s\n", msg));
 		XmlContent xml = new XmlContent();
 		if (xml.readFromString(msg) == 0)
 		{
 			String rootElementName = xml.getRootElementName();
 			LOGGER.info("   Root Element:" + rootElementName);
 			
-
-			String t1 = rootElementName2Templates.get(rootElementName).get("key1");
-			LOGGER.info("   Template1:" + t1);
+			IMessageHandler msgHandler = messageHandlerCollection.getByMessageType(rootElementName);
+			msgHandler.handleMessage(
+					xml, 
+					rootElementName2Templates.get(rootElementName), 
+					rootElementName2MessageProducer.get(rootElementName), 
+					outboundSession);
 			
-			String t2 = rootElementName2Templates.get(rootElementName).get("key2");
-			LOGGER.info("   Template2:" + t2);
 		}
 		
 	}

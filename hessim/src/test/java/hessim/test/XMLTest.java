@@ -29,6 +29,19 @@ public class XMLTest {
 	}
 	
 	@Test
+	public void testXpath()
+	{
+		XmlContent xml = new XmlContent();
+		xml.readFromFile("C:\\projects\\stmk\\EN_ATM4\\sagemcomsim\\testdata\\MeterAssetSendText\\MeterAssetSendTextRequestMessage.xml");
+		String name = xml.getRootElementName();
+		System.out.println("Root Element Name:"+name);
+		//Node node = xml.getXpathNode("/*/header/messageID");
+		xml.setXpathContent("/*/header/messageID", "9999");
+		String nodeval = xml.getXpathContent("/*/header/messageID");
+		
+	}
+	
+	@Test
 	public void testReadFromString()
 	{
 		Path filePath = Path.of("C:/junk/books.xml");

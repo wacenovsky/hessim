@@ -113,6 +113,34 @@ public class XmlContent {
 		return result;
 	}
 	
+	public int setXpathContent(String expression, String value)
+	{
+		int result = 0;
+		
+		if (domContent == null) return -1;
+		
+		XPath xPath = XPathFactory.newInstance().newXPath();
+		try {
+			Node node = (Node) xPath.compile(expression).evaluate(domContent, XPathConstants.NODE);
+			if (node == null) return -1;
+		    short nodeType = node.getNodeType();
+		    
+		    if (nodeType == Node.ELEMENT_NODE) 
+		    {
+		    	Node child = node.getFirstChild();
+		    	if (child.getNodeType() == Node.TEXT_NODE)
+		    	{
+		    		node.getFirstChild().setNodeValue(value);
+		    	}
+		    }
+		} catch (XPathExpressionException e) {
+			result = -1;
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
 	public Node getXpathNode(String expression)
 	{
 		Node node  = null;
