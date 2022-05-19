@@ -4,20 +4,10 @@
 package hessim.startup;
 
 import java.io.IOException;
-
-import hessim.config.Config;
-import hessim.config.MessageQueue;
-import hessim.config.MessageType;
-
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
-import hessim.msgprocessor.IMessageProcessor;
-import hessim.msgprocessor.MessageProcessor;
-import hessim.msgprocessor.MessageProcessorAsync;
-
-import com.google.gson.Gson; 
-import com.google.gson.GsonBuilder;  
+import hessim.msgprocessor.MessageProcessorAsync;  
 
 public class Startup {
 	public static void main(String[] args)

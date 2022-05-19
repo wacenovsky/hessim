@@ -28,6 +28,9 @@ import hessim.xml.XmlContent;
 import messagehandler.IMessageHandler;
 import messagehandler.MessageHandlerCollection;
 
+/*
+ * 
+ */
 public class MessageProcessorAsync implements Runnable, MessageListener
 {
 	BlockingQueue<Message> queue;
@@ -125,13 +128,6 @@ public class MessageProcessorAsync implements Runnable, MessageListener
 			}
 	    }
     }
-	
-	
-	public int sendMessage(MessageContainer msg, Destination dest)
-	{
-		int retval = 0;
-		return retval;		
-	}
 	
 	public void run()
 	{
