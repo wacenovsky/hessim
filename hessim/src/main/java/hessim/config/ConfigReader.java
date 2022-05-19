@@ -14,7 +14,8 @@ public class ConfigReader {
 
 	public Config readFromFile(String filename)
 	{
-		Path filePath = Path.of("C:\\projects\\stmk\\EN_ATM4\\sagemcomsim\\testdata\\config.json");
+		String configPath = System.getProperty("config.path");
+		Path filePath = Path.of(configPath);
 		String content;
 		try {
 			content = Files.readString(filePath, StandardCharsets.US_ASCII);

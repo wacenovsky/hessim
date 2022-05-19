@@ -1,6 +1,6 @@
 // Add this to VM Arguments
 // --add-opens java.base/java.lang=ALL-UNNAMED
-// start as: java --add-opens java.base/java.lang=ALL-UNNAMED -cp hessim-0.0.1-SNAPSHOT-jar-with-dependencies.jar hessim.startup.Startup
+// start as: java -Dconfig.path="C:/projects/stmk/EN_ATM4/sagemcomsim/testdata/config.json" --add-opens java.base/java.lang=ALL-UNNAMED -cp hessim-0.0.1-SNAPSHOT-jar-with-dependencies.jar hessim.startup.Startup
 package hessim.startup;
 
 import java.io.IOException;
