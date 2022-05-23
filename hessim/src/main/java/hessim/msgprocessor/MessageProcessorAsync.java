@@ -24,9 +24,9 @@ import com.google.inject.Inject;
 import hessim.config.Config;
 import hessim.config.MessageQueue;
 import hessim.config.MessageType;
+import hessim.messagehandler.IMessageHandler;
+import hessim.messagehandler.MessageHandlerCollection;
 import hessim.xml.XmlContent;
-import messagehandler.IMessageHandler;
-import messagehandler.MessageHandlerCollection;
 
 /*
  * 
