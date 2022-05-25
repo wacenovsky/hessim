@@ -19,14 +19,19 @@ public class MessageHandlerCollection {
 			{
 				switch (msgType)
 				{
-					case "type1":
+					case "groupReq":
 					{
+						IMessageHandler newHandler = new GroupReqMessageHandler();
+						msgType2Handler.put(msgType, newHandler);
+						break;
 						
 					}
-					default:
+					case "ami:MeterAssetSendTextRequestMessage":
+					case "ami:MeterAssetUpdateRequestMessage":
 					{
 						IMessageHandler newHandler = new DefaultMessageHandler();
 						msgType2Handler.put(msgType, newHandler);
+						break;
 					}
 				}
 			}

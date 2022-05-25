@@ -21,6 +21,7 @@ import org.apache.activemq.ActiveMQConnectionFactory;
 
 import com.google.inject.Inject;
 
+import exception.ConfigException;
 import hessim.config.Config;
 import hessim.config.MessageQueue;
 import hessim.config.MessageType;
@@ -47,7 +48,7 @@ public class MessageProcessorAsync implements Runnable, MessageListener
 	private MessageHandlerCollection messageHandlerCollection;
 	
 	@Inject
-	public MessageProcessorAsync(Config cnf)
+	public MessageProcessorAsync(Config cnf) throws ConfigException
 	{
 		config = cnf;
 		queue = new LinkedBlockingQueue<Message>();
@@ -85,7 +86,7 @@ public class MessageProcessorAsync implements Runnable, MessageListener
 		}
 	}
 	
-	public void createResponseProducers()
+	public void createResponseProducers() throws ConfigException
 	{
 		String outboundUrl = String.format("tcp://%s:%s", config.outboundIP, config.outboundPort);
 		try {
@@ -104,6 +105,10 @@ public class MessageProcessorAsync implements Runnable, MessageListener
 				{
 					String messageName = entry.getKey();
 					MessageType messageType = entry.getValue();
+					if (rootElementName2MessageProducer.containsKey(messageName) || rootElementName2Templates.containsKey(messageName))
+					{
+						throw new ConfigException(String.format("Message %s already in other queue", messageName));
+					}
 					rootElementName2MessageProducer.put(messageName, producer);
 					rootElementName2Templates.put(messageName, messageType.templates);
 				}

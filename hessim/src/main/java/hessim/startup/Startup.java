@@ -7,6 +7,7 @@ import java.io.IOException;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
+import exception.ConfigException;
 import hessim.msgprocessor.MessageProcessorAsync;  
 
 public class Startup {
@@ -16,10 +17,10 @@ public class Startup {
 			MyLogger.setup();
 			Injector injector = Guice.createInjector(new BindingsModule());
 			MessageProcessorAsync msgproc = injector.getInstance(MessageProcessorAsync.class);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return;
+			System.exit(-1);
 		}
 		System.out.println("ende");
 	}
