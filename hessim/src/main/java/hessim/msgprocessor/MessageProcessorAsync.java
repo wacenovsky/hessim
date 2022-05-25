@@ -21,10 +21,10 @@ import org.apache.activemq.ActiveMQConnectionFactory;
 
 import com.google.inject.Inject;
 
-import exception.ConfigException;
 import hessim.config.Config;
 import hessim.config.MessageQueue;
 import hessim.config.MessageType;
+import hessim.exception.ConfigException;
 import hessim.messagehandler.IMessageHandler;
 import hessim.messagehandler.MessageHandlerCollection;
 import hessim.xml.XmlContent;

@@ -1,4 +1,4 @@
-package exception;
+package hessim.exception;
 
 
 public class ConfigException extends Exception {

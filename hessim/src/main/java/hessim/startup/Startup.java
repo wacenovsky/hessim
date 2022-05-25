@@ -7,7 +7,7 @@ import java.io.IOException;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
-import exception.ConfigException;
+import hessim.exception.ConfigException;
 import hessim.msgprocessor.MessageProcessorAsync;  
 
 public class Startup {
