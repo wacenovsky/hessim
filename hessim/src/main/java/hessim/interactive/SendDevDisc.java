@@ -42,12 +42,14 @@ public class SendDevDisc {
 					         + "   <dcId>$</dcId>\n"
 					         + "</devdisc>";
 			XmlContent xml = new XmlContent();
+			System.out.println("Simulate device detection:\n"+ 
+			                   "Enter deviceId and dcId and the\n"+
+					           "request is sent to queue M2M_DEC_DEVICE\n");
 			try (Scanner scanner = new Scanner(System.in)) {
 				if (xml.readFromString(xmlString) == 0)		
 				while (true)
 				{
-					System.out.println("\nSimulate Device Discovering:\n");
-					System.out.println("devId?");
+					System.out.println("\ndevId?");
 				    String devId = scanner.nextLine();  
 					System.out.println("dcId?");
 				    String dcId = scanner.nextLine();  
@@ -56,13 +58,12 @@ public class SendDevDisc {
 				    String timeStr = getIsoUtcDate();
 				    xml.setXpathContent("/*/time", timeStr);
 				    String finalXmlString = xml.convertToString();
-				    System.out.println("Send to queue M2M_DEC_DEVICE:");
-				    System.out.println(finalXmlString);
 				    TextMessage message = session.createTextMessage();
 					message.setText(finalXmlString);
 					message.setJMSCorrelationID("");
 				    producer.send(message);
-				    System.out.println("==================");
+				    System.out.println("\n -> Sent to queue M2M_DEC_DEVICE:");
+				    System.out.println(finalXmlString);
 				}
 			}
 		} catch (Exception e) {
