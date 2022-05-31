@@ -33,6 +33,11 @@ public class MessageHandlerCollection {
 						msgType2Handler.put(msgType, newHandler);
 						break;
 					}
+					default:
+					{
+						IMessageHandler newHandler = new DefaultMessageHandler();
+						msgType2Handler.put(msgType, newHandler);
+					}
 				}
 			}
 		}
